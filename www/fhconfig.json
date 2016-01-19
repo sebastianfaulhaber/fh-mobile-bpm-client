@@ -3,5 +3,10 @@
   "appkey": "c7cbf0918387443b34f62f6b64ac3a8493a475ba",
   "connectiontag": "0.0.2",
   "host": "https://sa-jboss-dach.redhat.feedhenry.com",
-  "projectid": "cn4wjytjvbpp36i54bsr4ttf"
+  "ios": {
+    "variantID": "2933c0f5-9544-4dbb-aea0-59aa016019c5",
+    "variantSecret": "a61928d6-acf5-40ae-9e54-6394b8d93aa0"
+  },
+  "projectid": "cn4wjytjvbpp36i54bsr4ttf",
+  "pushServerURL": "https://sa-jboss-dach.redhat.feedhenry.com/api/v2/ag-push"
 }
