@@ -1,8 +1,9 @@
 {
     "aerogear-cordova-push": {
         "source": {
-            "type": "registry",
-            "id": "aerogear-cordova-push"
+            "type": "git",
+            "url": "https://github.com/aerogear/aerogear-pushplugin-cordova.git",
+            "subdir": "."
         },
         "is_top_level": true,
         "variables": {}
