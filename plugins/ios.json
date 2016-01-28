@@ -1,1 +1,19 @@
-{"prepare_queue":{"installed":[],"uninstalled":[]},"config_munge":{},"installed_plugins":{},"dependent_plugins":{}}
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "aerogear-cordova-push": {
+            "PACKAGE_NAME": "com.ionicframework.myfirstionic468489"
+        }
+    },
+    "dependent_plugins": {
+        "es6-promise-plugin": {
+            "PACKAGE_NAME": "com.ionicframework.myfirstionic468489"
+        }
+    }
+}
