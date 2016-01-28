@@ -1,0 +1,10 @@
+{
+    "aerogear-cordova-push": {
+        "source": {
+            "type": "registry",
+            "id": "aerogear-cordova-push"
+        },
+        "is_top_level": true,
+        "variables": {}
+    }
+}
