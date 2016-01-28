@@ -1,0 +1,81 @@
+description = 'This plugin makes starting with AeroGear Unified Push simple.'
+
+import org.ajoberstar.gradle.git.tasks.*
+
+buildscript {
+  repositories { mavenCentral() }
+  dependencies { classpath 'org.ajoberstar:gradle-git:0.6.3' }
+}
+
+task configure {
+	ext.plugin = new XmlParser().parse('plugin.xml')
+    if (version != 'unspecified') {
+        ext.version = version
+    } else {
+        def versions = plugin.@version.tokenize('.')
+        versions[2] = versions[2].toInteger() + 1
+        ext.version = versions.join('.')
+    }
+}
+
+/* Update version git */
+task updateVersionPlugin {
+    configure.plugin.@version = configure.version
+
+	def writer = new FileWriter('plugin.xml')
+	new XmlNodePrinter(new PrintWriter(writer)).print(configure.plugin)
+}
+
+task add(type: GitAdd, dependsOn: updateVersionPlugin) {
+	include 'plugin.xml'
+}
+
+task tag(type: GitTag, dependsOn: add) {
+	tagName = configure.version
+	message = "Release of ${tagName}"
+}
+
+task commit(type: GitCommit, dependsOn: tag) {
+	message = "Updated version for release of $configure.version"
+}
+
+task updateVersion(type: GitPush, dependsOn: commit) {
+}
+
+ext {
+	cordovaProject = '/tmp/test'
+}
+
+/* Test build */
+task testCreate(type:Exec) {
+	workingDir '/tmp'
+
+	commandLine 'cordova'
+	args 'create', 'test'
+}
+
+task testPlatform(type:Exec, dependsOn: testCreate) {
+    workingDir cordovaProject
+    
+	commandLine 'cordova'
+	args 'platform', 'add', 'ios', 'android'
+}
+
+task testPlugin(type:Exec, dependsOn: testPlatform) {
+	workingDir cordovaProject
+
+	commandLine 'cordova'
+	args 'plugin', 'add', file('.')
+}
+
+task testCopy(type: Copy, dependsOn: testPlugin) {
+    from 'tests'
+    into "$cordovaProject/www"
+}
+
+task build(type:Exec, dependsOn: testCopy) {
+	workingDir cordovaProject
+
+	commandLine 'cordova'
+	args 'build'
+}

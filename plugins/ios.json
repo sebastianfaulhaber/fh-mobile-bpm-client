@@ -8,12 +8,12 @@
     },
     "installed_plugins": {
         "aerogear-cordova-push": {
-            "PACKAGE_NAME": "com.ionicframework.myfirstionic468489"
+            "PACKAGE_NAME": "com.redhat.bpmpushdemo"
         }
     },
     "dependent_plugins": {
         "es6-promise-plugin": {
-            "PACKAGE_NAME": "com.ionicframework.myfirstionic468489"
+            "PACKAGE_NAME": "com.redhat.bpmpushdemo"
         }
     }
 }
