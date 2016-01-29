@@ -1,21 +1,53 @@
 <ion-view view-title="Dashboard">
   <ion-content class="padding">
-    <h2>Welcome to MyInsurance</h2>
-    <div id="waiting">
-       <div id="loadingProgressG">
-          <div class="loadingProgressG">
-          </div>
-       </div>
-       <p>Registering...</p>
+
+  <style>
+  .spinner svg {
+    width: 12px;
+    height: 12px;
+    stroke: #444;
+    fill: #444;
+  }
+  </style>
+
+
+    <h2>MyInsurance</h2>
+
+
+    <h4>Messages</h4>
+    <div class="list">
+      <a id="waiting" class="item" href="#">
+        <ion-spinner class="spinner-assertive"></ion-spinner>
+        <p style="display: inline;">Registering for push notifications</p>
+      </a>
+
+      <a id="pushenabled" class="item" href="#" style="display: none">
+        <h2><i class="icon ion-checkmark"></i>&nbsp;Successfully registered</h2>
+        <p>You will receive push notifications from MyInsurance from now on.</p>
+      </a>
+
+      <a id="pushregistererror" class="item" href="#" style="display: none">
+        <h2><i class="icon ion-alert-circled"></i>&nbsp;Error while enabling push</h2>
+        <p id="pushregistererror-msg">ERROR</p>
+      </a>
     </div>
 
-    <div id="nothing" style="display: none">
-       <p><i class="fa fa-bell-slash"></i></p>
-       <h2>Nothing here yet.</h2>
-       <p>Send notifications from the console.</p>
+    <div id="messages" class="list">
     </div>
 
-    <ul id="messages"></ul>
+
+    <h4>Create a new case</h4>
+    <div class="list list-inset">
+      <label class="item item-input">
+        <input type="text" placeholder="First Name">
+      </label>
+      <label class="item item-input">
+        <input type="text" placeholder="Last Name">
+      </label>
+      <button class="button button-block button-stable">
+        Create new case
+      </button>
+    </div>
 
   </ion-content>
 </ion-view>

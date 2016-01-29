@@ -32,30 +32,41 @@ var app = {
 
       function successHandler() {
          app.clearMessages();
-         if (document.getElementById("messages").childElementCount === 0) {
-           document.getElementById("nothing").style.display = 'block';
-         }
+         document.getElementById('waiting').style.display = 'none';
+         document.getElementById('pushenabled').style.display = 'block';
       }
 
       function errorHandler(error) {
-         app.clearMessages();
-         app.addMessage('Error registering: "' + error + '"');
+        document.getElementById('waiting').style.display = 'none';
+        document.getElementById('pushregistererror').style.display = 'block';
+        document.getElementById('pushregistererror-msg').innerHTML = error;
       }
    },
    onNotification: function (event) {
-      document.getElementById('nothing').style.display = 'none';
-      app.addMessage(event.alert || event.version);
+      app.addMessage('Sabine Sachbearbeiter', event.alert || event.version);
    },
-   addMessage: function (message) {
-      var messages = document.getElementById("messages"),
-         element = document.createElement("li");
-      //for ui testing add an id for easy (fast) selecting
-      element.setAttribute("id", "message" + (messages.childElementCount + 1));
-      messages.appendChild(element);
-      element.innerHTML = message;
+   addMessage: function (from, message) {
+     document.getElementById('nomessages').style.display = 'none';
+      var messages = document.getElementById("messages");
+      var el = document.createElement("a");
+      el.innerHTML = '<img ng-src="img/women.jpg"><h2>' + from + '</h2><p>' + message + '</p>';
+      el.setAttribute('class', 'item item-avatar');
+      el.setAttribute('href', '#');
+      messages.appendChild(el);
    },
    clearMessages: function() {
-     var waiting = document.getElementById("waiting");
-     waiting.parentElement.removeChild(waiting);
+    // Remove all messages
+    var myNode = document.getElementById("messages");
+      while (myNode.firstChild) {
+          myNode.removeChild(myNode.firstChild);
+      }
+
+      // Add nothing here message
+      var el = document.createElement("a");
+      el.innerHTML = '<p>No messages.</p>';
+      el.setAttribute('id', 'nomessages');
+      el.setAttribute('class', 'item');
+      el.setAttribute('href', '#');
+      myNode.appendChild(el);
    }
 };
