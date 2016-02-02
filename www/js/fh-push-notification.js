@@ -49,7 +49,7 @@ var app = {
      document.getElementById('nomessages').style.display = 'none';
       var messages = document.getElementById("messages");
       var el = document.createElement("a");
-      el.innerHTML = '<img ng-src="img/women.jpg"><h2>' + from + '</h2><p>' + message + '</p>';
+      el.innerHTML = '<img ng-src="img/women.jpg" src="img/women.jpg"><h2>' + from + '</h2><p>' + message + '</p>';
       el.setAttribute('class', 'item item-avatar');
       el.setAttribute('href', '#');
       messages.appendChild(el);

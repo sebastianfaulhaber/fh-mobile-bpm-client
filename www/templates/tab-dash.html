@@ -36,18 +36,23 @@
     </div>
 
 
-    <h4>Create a new case</h4>
-    <div class="list list-inset">
-      <label class="item item-input">
-        <input type="text" placeholder="First Name">
-      </label>
-      <label class="item item-input">
-        <input type="text" placeholder="Last Name">
-      </label>
-      <button class="button button-block button-stable">
-        Create new case
-      </button>
-    </div>
+    <h4>Create a new request</h4>
+    <form ng-submit="createCase(mycase)">
+      <div class="list list-inset">
+        <label class="item item-input">
+          <input type="text" placeholder="First Name" ng-model="mycase.firstname">
+        </label>
+        <label class="item item-input">
+          <input type="text" placeholder="Last Name" ng-model="mycase.lastname">
+        </label>
+        <label class="item item-input">
+          <textarea placeholder="My request" ng-model="mycase.request"></textarea>
+        </label>
+        <button type="submit" class="button button-block button-stable">
+          Create new case
+        </button>
+      </div>
+    </form>
 
   </ion-content>
 </ion-view>
