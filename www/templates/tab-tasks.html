@@ -1,0 +1,46 @@
+<ion-view view-title="My tasks">
+  <ion-content data-ng-init="loadTasks()">
+    <ion-refresher
+      pulling-text="Pull to refresh..."
+      on-refresh="loadTasks()">
+    </ion-refresher>
+          <ion-list can-swipe="listCanSwipe">
+            <ion-item class="item item-icon-right" ng-repeat="task in tasks | filter:statusIsReserved" href="#/tab/tasks/{{task.id}}">
+              <h2>Task Name</h2>
+              <p>{{task.name}}</p>
+              <h2>Actual Owner</h2>
+              <p>{{task.actualOwnerId}}</p>
+              <i class="icon ion-chevron-right icon-accessory"></i>
+              <ion-option-button class="button-assertive button-start" ng-click="startTask(task)">
+                Start
+              </ion-option-button>
+              <ion-option-button class="button-positive button-release" ng-click="releaseTask(task)">
+                Release
+              </ion-option-button>
+            </ion-item>
+            <ion-item class="item item-icon-right" ng-repeat="task in tasks | filter:statusIsInProgress" href="#/tab/tasks/{{task.id}}">
+              <h2>Task Name</h2>
+              <p>{{task.name}}</p>
+              <h2>Actual Owner</h2>
+              <p>{{task.actualOwnerId}}</p>
+              <i class="icon ion-chevron-right icon-accessory"></i>
+              <ion-option-button class="button-assertive button-complete" ng-click="completeTask(task)">
+                Complete
+              </ion-option-button>
+              <ion-option-button class="button-positive button-release" ng-click="releaseTask(task)">
+                Release
+              </ion-option-button>
+            </ion-item>
+            <ion-item class="item item-icon-right" ng-repeat="task in tasks | filter:statusIsReady" href="#/tab/tasks/{{task.id}}">
+              <h2>Task Name</h2>
+              <p>{{task.name}}</p>
+              <h2>Actual Owner</h2>
+              <p>{{task.actualOwnerId}}</p>
+              <i class="icon ion-chevron-right icon-accessory"></i>
+              <ion-option-button class="button-assertive button-claim" ng-click="claimTask(task)">
+                Claim
+              </ion-option-button>
+            </ion-item>
+          </ion-list>
+  </ion-content>
+</ion-view>

@@ -1,0 +1,33 @@
+<ion-view view-title="{{taskContent.TaskName}}">
+  <ion-content class="padding">
+      <div class="list list-inset">
+        <div class="item">
+          <b>Node name:</b> {{taskContent.NodeName}}
+        </div>
+        <div class="item">
+          <b>Error message:</b> {{taskContent.errorMessage}}
+        </div>
+        <div class="item">
+          <b>Timestamp:</b> {{taskContent.timestamp}}
+        </div>
+        <div class="item">
+          <b>Actor id:</b> {{taskContent.ActorId}}
+        </div>
+        <div class="item">
+          <b>Device type:</b> {{taskContent.deviceType}}
+        </div>
+        <div class="item">
+          <b>Device ID:</b> {{taskContent.deviceID}}
+        </div>
+        <div class="item">
+          <b>Errorcode:</b> {{taskContent.errorCode}}
+        </div>
+        <div class="item">
+          <b>Payload:</b> {{taskContent.payload}}
+        </div>
+        <div class="item">
+          <b>Skippable:</b> {{taskContent.Skippable}}
+        </div>
+      </div>
+  </ion-content>
+</ion-view>

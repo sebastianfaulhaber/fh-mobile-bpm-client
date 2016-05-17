@@ -1,0 +1,35 @@
+<ion-view view-title="Settings">
+  <ion-content class="padding">
+    <ion-list>
+    <ion-toggle  ng-model="settings.enablePush">
+        Enable push notifications
+    </ion-toggle>
+    </ion-list>
+    <h4>Login</h4>
+    <form>
+      <div class="list list-inset" data-ng-init="initCredentials()">
+        <label class="item item-input">
+          <input ng-model="login.username" type="text" placeholder="Username">
+        </label>
+        <label class="item item-input">
+          <input ng-model="login.password" type="password" placeholder="Password">
+        </label>
+        <label class="item item-input">
+          <input ng-model="login.ip" type="text" placeholder="IP"></input>
+        </label>
+        <label class="item item-input">
+          <input ng-model="login.port" type="text" placeholder="Port"></input>
+        </label>
+        <button type="button" class="button button-block button-stable" ng-click="setLoginCredentials()">
+          Set login
+        </button>
+      </div>
+    </form>
+    <div class="aboutContent">
+          <p>For any further questions you can ask
+          <br> Patrick Steiner: <a href="mailto:psteiner@redhat.com">psteiner@redhat.com</a>
+          <br> Sebastian Faulhaber: <a href="mailto:sfaulhaber@redhat.com">sfaulhaber@redhat.com</a>
+          <br> Sebastian Dehn: <a href="mailto:sdehn@redhat.com">sdehn@redhat.com</a></p>
+    </div>
+  </ion-content>
+</ion-view>
