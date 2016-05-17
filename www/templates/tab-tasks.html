@@ -4,7 +4,12 @@
       pulling-text="Pull to refresh..."
       on-refresh="loadTasks()">
     </ion-refresher>
-          <ion-list can-swipe="listCanSwipe">
+    <div class="list" ng-show="noticeMessage">
+      <span class="item noticeMessage" >
+        <p class="noticeMessage"><b>{{noticeMessage}}</b></p>
+      </span>
+    </div>
+          <ion-list can-swipe="listCanSwipe" ng-show="tasks">
             <ion-item class="item item-icon-right" ng-repeat="task in tasks | filter:statusIsReserved" href="#/tab/tasks/{{task.id}}">
               <h2>Task Name</h2>
               <p>{{task.name}}</p>

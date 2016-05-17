@@ -26,10 +26,14 @@ angular.module('starter.controllers', [])
           "port": window.localStorage.getItem("bpm_port")
         }
       }, function(res) {
+        $scope.noticeMessage = null;
         $scope.processName = res.name;
-        $scope.hide();
       }, function(msg,err) {
+        $scope.processName = null;
+        $scope.noticeMessage = "$fh.cloud failed. Error: " + JSON.stringify(err);
       });
+      // Stop the ion-refresher from spinning
+      $scope.$broadcast('scroll.refreshComplete');
     }
 
     $scope.case = {
@@ -39,15 +43,8 @@ angular.module('starter.controllers', [])
     $scope.createCase = function(){
       $scope.show();
       // check if userInput is defined
-      if ($scope.case.errorMessage) {
-        /**
-         * Pass the userInput to the module containing the $fh.cloud call.
-         *
-         * Notice that the defer.resolve and defer.reject functions are passed to the module.
-         * One of these functions will be called when the $fh.cloud function has completed successully or encountered
-         * an error.
-         */
-        var url = 'http://' + username + ':' + password + '@' + ip + ':' + port + '/business-central/rest/task/query';
+      if ($scope.case.errorMessage && $scope.case.timestamp && $scope.case.deviceType && $scope.case.deviceID &&
+         $scope.case.errorCode && $scope.case.payload) {
         $fh.cloud({
           "path": "/bpm/startProcess",
           "method": "POST",
@@ -57,24 +54,34 @@ angular.module('starter.controllers', [])
             "password": window.localStorage.getItem("bpm_password"),
             "ip": window.localStorage.getItem("bpm_ip"),
             "port": window.localStorage.getItem("bpm_port"),
-            "errorMessage": $scope.case.errorMessage
+            "errorMessage": $scope.case.errorMessage,
+            "timestamp": $scope.case.timestamp,
+            "deviceType": $scope.case.deviceType,
+            "deviceID": $scope.case.deviceID,
+            "errorCode": $scope.case.errorCode,
+            "payload": $scope.case.payload
           },
           "timeout": 25000
         }, function(res) {
+          $scope.noticeMessage = null;
           // Clear form values
           $scope.case.errorMessage = '';
+          $scope.case.timestamp = '';
+          $scope.case.deviceType = '';
+          $scope.case.deviceID = '';
+          $scope.case.errorCode = '';
+          $scope.case.payload = '';
           // Clear loading
           $scope.hide();
           //alert('Got response from cloud:' + JSON.stringify(res));
         }, function(msg,err) {
-          // Clear form values
-          $scope.case.errorMessage = '';
+          $scope.noticeMessage = "$fh.cloud failed. Error: " + JSON.stringify(err);
           // Clear loading
           $scope.hide();
           //alert('Cloud call failed with error message:' + msg + '. Error properties:' + JSON.stringify(err));
         });
       }else {
-        $scope.noticeMessage  = "Please fill the form";
+        $scope.noticeMessage  = "Please fill out the form";
         // Clear loading
         $scope.hide();
       }
@@ -160,9 +167,14 @@ angular.module('starter.controllers', [])
           "port": window.localStorage.getItem("bpm_port")
         }
       }, function(res) {
+        $scope.noticeMessage = null;
         $scope.tasks = res.taskSummaryList;
         $scope.hide();
       }, function(msg,err) {
+        $scope.tasks = null;
+        $scope.noticeMessage = "$fh.cloud failed. Error: " + JSON.stringify(err);
+        // Clear loading
+        $scope.hide();
       });
       // Stop the ion-refresher from spinning
       $scope.$broadcast('scroll.refreshComplete');
@@ -184,8 +196,11 @@ angular.module('starter.controllers', [])
         }
       }, function(res) {
         allTasks();
-        $scope.hide();
       }, function(msg,err) {
+        $scope.noticeMessage = "$fh.cloud failed. Error: " + JSON.stringify(err);
+        $scope.tasks = null;
+        // Clear loading
+        $scope.hide();
       });
   };
 
@@ -205,6 +220,10 @@ angular.module('starter.controllers', [])
       }, function(res) {
           allTasks();
       }, function(msg,err) {
+        $scope.noticeMessage = "$fh.cloud failed. Error: " + JSON.stringify(err);
+        $scope.tasks = null;
+        // Clear loading
+        $scope.hide();
       });
   };
 
@@ -224,6 +243,10 @@ angular.module('starter.controllers', [])
       }, function(res) {
           allTasks();
       }, function(msg,err) {
+        $scope.noticeMessage = "$fh.cloud failed. Error: " + JSON.stringify(err);
+        $scope.tasks = null;
+        // Clear loading
+        $scope.hide();
       });
   };
 
@@ -243,6 +266,10 @@ angular.module('starter.controllers', [])
       }, function(res) {
           allTasks();
       }, function(msg,err) {
+        $scope.noticeMessage = "$fh.cloud failed. Error: " + JSON.stringify(err);
+        $scope.tasks = null;
+        // Clear loading
+        $scope.hide();
       });
   };
 
@@ -282,6 +309,7 @@ angular.module('starter.controllers', [])
     $ionicLoading.hide();
   };
 
+$scope.getTaskContent = function(){
   $scope.show();
   $fh.cloud({
     "path": "/bpm/loadTaskContent",
@@ -296,10 +324,15 @@ angular.module('starter.controllers', [])
     },
     "timeout": 25000
   }, function(res) {
+    $scope.noticeMessage = null;
     $scope.taskContent = res.contentMap;
     $scope.hide();
   }, function(msg,err) {
-
-    //alert('Cloud call failed with error message:' + msg + '. Error properties:' + JSON.stringify(err));
+    $scope.taskContent = null;
+    $scope.noticeMessage = "$fh.cloud failed. Error: " + JSON.stringify(err);
+    $scope.hide();
   });
+  // Stop the ion-refresher from spinning
+  $scope.$broadcast('scroll.refreshComplete');
+}
 })

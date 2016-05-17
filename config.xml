@@ -4,7 +4,7 @@
   <description>
         A mobile application to communicate with Red Hat's BPM Suite.
     </description>
-  <author email="sebastian.dehn@redhat.com" href="http://www.redhat.com/">
+  <author email="sdehn@redhat.com" href="http://www.redhat.com/">
       Sebastian Dehn
   </author>
   <content src="index.html"/>

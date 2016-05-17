@@ -1,6 +1,9 @@
 <ion-view view-title="Dashboard">
   <ion-content class="padding">
-
+    <ion-refresher
+      pulling-text="Pull to refresh..."
+      on-refresh="getProcess()">
+    </ion-refresher>
   <style>
   .spinner svg {
     width: 12px;
@@ -16,25 +19,23 @@
         <ion-spinner class="spinner-assertive"></ion-spinner>
         <p style="display: inline;">Registering for push notifications</p>
       </a>
-
       <a id="pushenabled" class="item" href="#" style="display: none">
         <h2><i class="icon ion-checkmark"></i>&nbsp;Successfully registered</h2>
         <p>You will receive push notifications from MyInsurance from now on.</p>
       </a>
-
       <a id="pushregistererror" class="item" href="#" style="display: none">
         <h2><i class="icon ion-alert-circled"></i>&nbsp;Error while enabling push</h2>
         <p id="pushregistererror-msg">ERROR</p>
       </a>
-      <span class="item">
+      <span class="item" ng-show="processName">
         <p>Currently interacting with the following Process:</p>
         <p><b>{{processName}}</b></p>
       </span>
-      <span class="item" ng-show="noticeMessage">
+      <span class="item noticeMessage" ng-show="noticeMessage">
         <p class="noticeMessage"><b>{{noticeMessage}}</b></p>
       </span>
     </div>
-
+    <div ng-show="processName">
     <h4>Create a new case</h4>
     <form>
       <div class="list list-inset" data-ng-init="getProcess()">
@@ -61,5 +62,6 @@
         </button>
       </div>
     </form>
+  </div>
   </ion-content>
 </ion-view>
