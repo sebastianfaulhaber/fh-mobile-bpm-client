@@ -189,6 +189,10 @@ angular.module('starter.controllers', [])
     allTasks();
   }
 
+  function isBlank(str) {
+    return (!str || /^\s*$/.test(str));
+  }
+
   function allTasks(){
       $fh.cloud({
         "path": "/bpm/loadTasks",
@@ -208,8 +212,14 @@ angular.module('starter.controllers', [])
         }else{
           $scope.noticeMessage = null;
           $scope.tasks = res.taskSummaryList;
-          if($scope.tasks.length == 0){
+          if(res.taskSummaryList.length == 0){
             $scope.noticeMessage  = 'Tasklist is empty';
+          }else{
+            for (i = 0; i < res.taskSummaryList.length; i++) {
+              if(isBlank(res.taskSummaryList[i].actualOwnerId))
+              res.taskSummaryList[i].actualOwnerId = 'Ownerless';
+            }
+            $scope.tasks = res.taskSummaryList;
           }
           $scope.hide();
         }

@@ -138,3 +138,12 @@
   border-radius: 25px;
   border-color: #101010;
 }
+
+.taskListItem{
+  float: left;
+  margin-right: 15%;
+}
+
+.ownerlessTask{
+  color: #cc0000 !IMPORTANT;
+}

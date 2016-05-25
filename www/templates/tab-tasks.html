@@ -11,10 +11,18 @@
     </div>
           <ion-list can-swipe="listCanSwipe" ng-show="tasks">
             <ion-item class="item item-icon-right" ng-repeat="task in tasks | filter:statusIsReserved" href="#/tab/tasks/{{task.id}}?status={{task.status}}">
-              <h2>Task Name</h2>
-              <p>{{task.name}}</p>
-              <h2>Actual Owner</h2>
-              <p>{{task.actualOwnerId}}</p>
+              <div class="taskListItem">
+                <h2>Task Name</h2>
+                <p>{{task.name}}</p>
+                <h2>Actual Owner</h2>
+                <p>{{task.actualOwnerId}}</p>
+              </div>
+              <div>
+                <h2>Status</h2>
+                <p>{{task.status}}</p>
+                <h2>ID</h2>
+                <p>{{task.processInstanceId}}</p>
+              </div>
               <i class="icon ion-chevron-right icon-accessory"></i>
               <ion-option-button class="button-assertive button-start" ng-click="startTask(task)">
                 Start
@@ -24,20 +32,36 @@
               </ion-option-button>
             </ion-item>
             <ion-item class="item item-icon-right" ng-repeat="task in tasks | filter:statusIsInProgress" href="#/tab/tasks/{{task.id}}?status={{task.status}}">
-              <h2>Task Name</h2>
-              <p>{{task.name}}</p>
-              <h2>Actual Owner</h2>
-              <p>{{task.actualOwnerId}}</p>
+              <div class="taskListItem">
+                <h2>Task Name</h2>
+                <p>{{task.name}}</p>
+                <h2>Actual Owner</h2>
+                <p>{{task.actualOwnerId}}</p>
+              </div>
+              <div>
+                <h2>Status</h2>
+                <p>{{task.status}}</p>
+                <h2>ID</h2>
+                <p>{{task.processInstanceId}}</p>
+              </div>
               <i class="icon ion-chevron-right icon-accessory"></i>
               <ion-option-button class="button-positive button-release" ng-click="releaseTask(task)">
                 Release
               </ion-option-button>
             </ion-item>
             <ion-item class="item item-icon-right" ng-repeat="task in tasks | filter:statusIsReady" href="#/tab/tasks/{{task.id}}?status={{task.status}}">
-              <h2>Task Name</h2>
-              <p>{{task.name}}</p>
-              <h2>Actual Owner</h2>
-              <p>{{task.actualOwnerId}}</p>
+              <div class="taskListItem">
+                <h2>Task Name</h2>
+                <p>{{task.name}}</p>
+                <h2>Actual Owner</h2>
+                <p class="ownerlessTask">{{task.actualOwnerId}}</p>
+              </div>
+              <div>
+                <h2>Status</h2>
+                <p>{{task.status}}</p>
+                <h2>ID</h2>
+                <p>{{task.processInstanceId}}</p>
+              </div>
               <i class="icon ion-chevron-right icon-accessory"></i>
               <ion-option-button class="button-assertive button-claim" ng-click="claimTask(task)">
                 Claim
