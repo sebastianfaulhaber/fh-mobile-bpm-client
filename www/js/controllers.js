@@ -26,8 +26,13 @@ angular.module('starter.controllers', [])
           "port": window.localStorage.getItem("bpm_port")
         }
       }, function(res) {
-        $scope.noticeMessage = null;
-        $scope.processName = res.name;
+        if(res.code == 'ECONNREFUSED'){
+          $scope.noticeMessage = 'Connection to mBaaS refused';
+          $scope.processName = null;
+        }else{
+          $scope.noticeMessage = null;
+          $scope.processName = res.name;
+        }
       }, function(msg,err) {
         $scope.processName = null;
         $scope.noticeMessage = "$fh.cloud failed. Error: " + JSON.stringify(err);
@@ -63,22 +68,27 @@ angular.module('starter.controllers', [])
           },
           "timeout": 25000
         }, function(res) {
-          $scope.noticeMessage = null;
-          // Clear form values
-          $scope.case.errorMessage = '';
-          $scope.case.timestamp = '';
-          $scope.case.deviceType = '';
-          $scope.case.deviceID = '';
-          $scope.case.errorCode = '';
-          $scope.case.payload = '';
-          // Clear loading
-          $scope.hide();
-          //alert('Got response from cloud:' + JSON.stringify(res));
+          if(res.code == 'ECONNREFUSED'){
+            $scope.noticeMessage = 'Connection to mBaaS refused';
+            $scope.processName = null;
+            // Clear loading
+            $scope.hide();
+          }else{
+            $scope.noticeMessage = null;
+            // Clear form values
+            $scope.case.errorMessage = '';
+            $scope.case.timestamp = '';
+            $scope.case.deviceType = '';
+            $scope.case.deviceID = '';
+            $scope.case.errorCode = '';
+            $scope.case.payload = '';
+            // Clear loading
+            $scope.hide();
+          }
         }, function(msg,err) {
           $scope.noticeMessage = "$fh.cloud failed. Error: " + JSON.stringify(err);
           // Clear loading
           $scope.hide();
-          //alert('Cloud call failed with error message:' + msg + '. Error properties:' + JSON.stringify(err));
         });
       }else {
         $scope.noticeMessage  = "Please fill out the form";
@@ -89,10 +99,11 @@ angular.module('starter.controllers', [])
 })
 
 .controller('AccountCtrl', function($scope, $ionicLoading) {
+  var message = '';
   // Show loading...
   $scope.show = function() {
     $ionicLoading.show({
-      template: '<div class="ion-checkmark">&nbsp;Success</div>',
+      template: '<div class="ion-checkmark">&nbsp;'+message+'</div>',
       duration: 1000
     });
   };
@@ -110,16 +121,39 @@ angular.module('starter.controllers', [])
   }
 
   $scope.setLoginCredentials = function(){
-      $scope.show();
-      // store the credentials to the mobile device
-      window.localStorage.setItem("bpm_username", $scope.login.username);
-      window.localStorage.setItem("bpm_password", $scope.login.password);
-      window.localStorage.setItem("bpm_ip", $scope.login.ip);
-      window.localStorage.setItem("bpm_port", $scope.login.port);
-    };
+    $fh.cloud({
+      "path": "/bpm/testRequest",
+      "method": "POST",
+      "contentType": "application/json",
+      "data": {
+        "username": $scope.login.username,
+        "password": $scope.login.password,
+        "ip": $scope.login.ip,
+        "port": $scope.login.port
+      }
+    }, function(res) {
+      if(res.code == 'ECONNREFUSED'){
+        $scope.noticeMessage = 'Connection to mBaaS refused';
+      }else{
+        if(res.includes('HTTP Status 401')){
+          message = 'Bad credentials';
+          $scope.show();
+      }else{
+        message = 'Success';
+        $scope.show();
+        // store the credentials to the mobile device
+        window.localStorage.setItem("bpm_username", $scope.login.username);
+        window.localStorage.setItem("bpm_password", $scope.login.password);
+        window.localStorage.setItem("bpm_ip", $scope.login.ip);
+        window.localStorage.setItem("bpm_port", $scope.login.port);
+        }
+      }
+    }, function(msg,err) {
+      $scope.noticeMessage = "$fh.cloud failed. Error: " + JSON.stringify(err);
+    });
+  };
 
   $scope.initCredentials = function() {
-    //alert(window.localStorage.getItem("iot_username"));
       if(window.localStorage.getItem("bpm_username") != undefined){
         $scope.login.username = window.localStorage.getItem("bpm_username");
       }
@@ -167,9 +201,18 @@ angular.module('starter.controllers', [])
           "port": window.localStorage.getItem("bpm_port")
         }
       }, function(res) {
-        $scope.noticeMessage = null;
-        $scope.tasks = res.taskSummaryList;
-        $scope.hide();
+        if(res.code == 'ECONNREFUSED'){
+          $scope.noticeMessage = 'Connection to mBaaS refused';
+          $scope.tasks = null;
+          $scope.hide();
+        }else{
+          $scope.noticeMessage = null;
+          $scope.tasks = res.taskSummaryList;
+          if($scope.tasks.length == 0){
+            $scope.noticeMessage  = 'Tasklist is empty';
+          }
+          $scope.hide();
+        }
       }, function(msg,err) {
         $scope.tasks = null;
         $scope.noticeMessage = "$fh.cloud failed. Error: " + JSON.stringify(err);
@@ -179,29 +222,6 @@ angular.module('starter.controllers', [])
       // Stop the ion-refresher from spinning
       $scope.$broadcast('scroll.refreshComplete');
 
-  };
-
-  $scope.completeTask = function(task){
-      $scope.show();
-      $fh.cloud({
-        "path": "/bpm/completeTask",
-        "method": "POST",
-        "contentType": "application/json",
-        "data": {
-          "username": window.localStorage.getItem("bpm_username"),
-          "password": window.localStorage.getItem("bpm_password"),
-          "ip": window.localStorage.getItem("bpm_ip"),
-          "port": window.localStorage.getItem("bpm_port"),
-          "taskId": task.id
-        }
-      }, function(res) {
-        allTasks();
-      }, function(msg,err) {
-        $scope.noticeMessage = "$fh.cloud failed. Error: " + JSON.stringify(err);
-        $scope.tasks = null;
-        // Clear loading
-        $scope.hide();
-      });
   };
 
   $scope.claimTask = function(task){
@@ -218,7 +238,13 @@ angular.module('starter.controllers', [])
           "taskId": task.id
         }
       }, function(res) {
+        if(res.code == 'ECONNREFUSED'){
+          $scope.noticeMessage = 'Connection to mBaaS refused';
+          $scope.tasks = null;
+          $scope.hide();
+        }else{
           allTasks();
+        }
       }, function(msg,err) {
         $scope.noticeMessage = "$fh.cloud failed. Error: " + JSON.stringify(err);
         $scope.tasks = null;
@@ -241,7 +267,13 @@ angular.module('starter.controllers', [])
           "taskId": task.id
         }
       }, function(res) {
+        if(res.code == 'ECONNREFUSED'){
+          $scope.noticeMessage = 'Connection to mBaaS refused';
+          $scope.tasks = null;
+          $scope.hide();
+        }else{
           allTasks();
+        }
       }, function(msg,err) {
         $scope.noticeMessage = "$fh.cloud failed. Error: " + JSON.stringify(err);
         $scope.tasks = null;
@@ -264,7 +296,13 @@ angular.module('starter.controllers', [])
           "taskId": task.id
         }
       }, function(res) {
+        if(res.code == 'ECONNREFUSED'){
+          $scope.noticeMessage = 'Connection to mBaaS refused';
+          $scope.tasks = null;
+          $scope.hide();
+        }else{
           allTasks();
+        }
       }, function(msg,err) {
         $scope.noticeMessage = "$fh.cloud failed. Error: " + JSON.stringify(err);
         $scope.tasks = null;
@@ -309,30 +347,88 @@ angular.module('starter.controllers', [])
     $ionicLoading.hide();
   };
 
-$scope.getTaskContent = function(){
-  $scope.show();
-  $fh.cloud({
-    "path": "/bpm/loadTaskContent",
-    "method": "POST",
-    "contentType": "application/json",
-    "data": {
-      "username": window.localStorage.getItem("bpm_username"),
-      "password": window.localStorage.getItem("bpm_password"),
-      "ip": window.localStorage.getItem("bpm_ip"),
-      "port": window.localStorage.getItem("bpm_port"),
-      "taskId": $stateParams.taskId
-    },
-    "timeout": 25000
-  }, function(res) {
-    $scope.noticeMessage = null;
-    $scope.taskContent = res.contentMap;
-    $scope.hide();
-  }, function(msg,err) {
-    $scope.taskContent = null;
-    $scope.noticeMessage = "$fh.cloud failed. Error: " + JSON.stringify(err);
-    $scope.hide();
-  });
-  // Stop the ion-refresher from spinning
-  $scope.$broadcast('scroll.refreshComplete');
-}
+  function showSuccessMessage() {
+    $ionicLoading.show({
+      template: '<div class="ion-checkmark">&nbsp; Success</div>',
+      duration: 1000
+    });
+    //Reloading the Task-Tab
+    window.location.reload(true);
+  };
+
+  $scope.getTaskContent = function(){
+    $scope.show();
+    loadTaskContent();
+  }
+
+  function loadTaskContent(){
+    $fh.cloud({
+      "path": "/bpm/loadTaskContent",
+      "method": "POST",
+      "contentType": "application/json",
+      "data": {
+        "username": window.localStorage.getItem("bpm_username"),
+        "password": window.localStorage.getItem("bpm_password"),
+        "ip": window.localStorage.getItem("bpm_ip"),
+        "port": window.localStorage.getItem("bpm_port"),
+        "taskStatus": $stateParams.status,
+        "taskId": $stateParams.taskId
+      },
+      "timeout": 25000
+    }, function(res) {
+      if(res.code == 'ECONNREFUSED'){
+        $scope.noticeMessage = 'Connection to mBaaS refused';
+        $scope.taskContent = null;
+        $scope.hide();
+      }else{
+        $scope.noticeMessage = null;
+        $scope.taskContent = res.contentMap;
+        $scope.hide();
+      }
+    }, function(msg,err) {
+      $scope.taskContent = null;
+      $scope.noticeMessage = "$fh.cloud failed. Error: " + JSON.stringify(err);
+      $scope.hide();
+    });
+    // Stop the ion-refresher from spinning
+    $scope.$broadcast('scroll.refreshComplete');
+  };
+
+  $scope.completeTask = function(){
+      $scope.show();
+      $fh.cloud({
+        "path": "/bpm/completeTask",
+        "method": "POST",
+        "contentType": "application/json",
+        "data": {
+          "username": window.localStorage.getItem("bpm_username"),
+          "password": window.localStorage.getItem("bpm_password"),
+          "ip": window.localStorage.getItem("bpm_ip"),
+          "port": window.localStorage.getItem("bpm_port"),
+          "taskId": $stateParams.taskId
+        }
+      }, function(res) {
+        if(res.code == 'ECONNREFUSED'){
+          $scope.noticeMessage = 'Connection to mBaaS refused';
+          $scope.taskContent = null;
+          $scope.hide();
+        }else{
+          $scope.hide();
+          showSuccessMessage();
+          location.href = '#/tab/tasks';
+        }
+      }, function(msg,err) {
+        $scope.noticeMessage = "$fh.cloud failed. Error: " + JSON.stringify(err);
+        $scope.tasks = null;
+        // Clear loading
+        $scope.hide();
+      });
+  };
+
+  $scope.statusIsInProgress = function(){
+      if ($stateParams.status == 'InProgress') {
+        return true;
+      }
+      return false;
+  };
 })

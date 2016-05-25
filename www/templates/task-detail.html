@@ -11,32 +11,26 @@
     </div>
       <div class="list list-inset" ng-show="taskContent" data-ng-init="getTaskContent()">
         <div class="item">
-          <b>Node name:</b> {{taskContent.NodeName}}
-        </div>
-        <div class="item">
-          <b>Error message:</b> {{taskContent.errorMessage}}
-        </div>
-        <div class="item">
-          <b>Timestamp:</b> {{taskContent.timestamp}}
-        </div>
-        <div class="item">
-          <b>Actor id:</b> {{taskContent.ActorId}}
-        </div>
-        <div class="item">
-          <b>Device type:</b> {{taskContent.deviceType}}
+          <b>Device Type:</b> {{taskContent.deviceType}}
         </div>
         <div class="item">
           <b>Device ID:</b> {{taskContent.deviceID}}
         </div>
         <div class="item">
-          <b>Errorcode:</b> {{taskContent.errorCode}}
+          <b>Data received:</b> {{taskContent.payload}}
         </div>
         <div class="item">
-          <b>Payload:</b> {{taskContent.payload}}
+          <b>Time of error event:</b> {{taskContent.timestamp}}
         </div>
         <div class="item">
-          <b>Skippable:</b> {{taskContent.Skippable}}
+          <b>Error Code:</b> {{taskContent.errorCode}}
         </div>
-      </div>
+        <div class="item">
+          <b>Error Message:</b> {{taskContent.errorMessage}}
+        </div>
+        <button type="button" class="button button-block button-stable" ng-click="completeTask()" ng-show="statusIsInProgress()">
+          Complete Task
+        </button>
+    </div>
   </ion-content>
 </ion-view>

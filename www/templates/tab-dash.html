@@ -40,22 +40,22 @@
     <form>
       <div class="list list-inset" data-ng-init="getProcess()">
         <label class="item item-input">
-          <input ng-model="case.errorMessage" type="text" placeholder="ErrorMessage">
-        </label>
-        <label class="item item-input">
-          <input ng-model="case.timestamp" type="text" placeholder="Timestamp">
-        </label>
-        <label class="item item-input">
-          <input ng-model="case.deviceType" type="text" placeholder="Device type"></input>
+          <input ng-model="case.deviceType" type="text" placeholder="Device Type"></input>
         </label>
         <label class="item item-input">
           <input ng-model="case.deviceID" type="text" placeholder="Device ID"></input>
         </label>
         <label class="item item-input">
-          <input ng-model="case.errorCode" type="text" placeholder="Errorcode"></input>
+          <input ng-model="case.payload" type="text" placeholder="Data received"></input>
         </label>
         <label class="item item-input">
-          <input ng-model="case.payload" type="text" placeholder="Paylod"></input>
+          <input ng-model="case.timestamp" type="text" placeholder="Time of error event">
+        </label>
+        <label class="item item-input">
+          <input ng-model="case.errorCode" type="text" placeholder="Erro Code"></input>
+        </label>  
+        <label class="item item-input">
+          <input ng-model="case.errorMessage" type="text" placeholder="Error Message">
         </label>
         <button type="button" class="button button-block button-stable" ng-click="createCase()">
           Create
