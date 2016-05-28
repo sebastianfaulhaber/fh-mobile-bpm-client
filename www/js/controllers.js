@@ -341,11 +341,11 @@ angular.module('starter.controllers', [])
       }
       return false;
   };
-
-
 })
 
-.controller('TaskDetailCtrl', function($scope, $stateParams, $ionicLoading) {
+.controller('TaskDetailCtrl', function($scope, $stateParams, $ionicLoading, $ionicModal) {
+  $scope.readOnly = 'readonly';
+
   $scope.show = function() {
     $ionicLoading.show({
       template: 'Loading...'
@@ -404,7 +404,7 @@ angular.module('starter.controllers', [])
     $scope.$broadcast('scroll.refreshComplete');
   };
 
-  $scope.completeTask = function(){
+  function completeTask(){
       $scope.show();
       $fh.cloud({
         "path": "/bpm/completeTask",
@@ -415,7 +415,13 @@ angular.module('starter.controllers', [])
           "password": window.localStorage.getItem("bpm_password"),
           "ip": window.localStorage.getItem("bpm_ip"),
           "port": window.localStorage.getItem("bpm_port"),
-          "taskId": $stateParams.taskId
+          "taskId": $stateParams.taskId,
+          "errorMessage": $scope.taskContent.errorMessage,
+          "timestamp": $scope.taskContent.timestamp,
+          "deviceType": $scope.taskContent.deviceType,
+          "deviceID": $scope.taskContent.deviceID,
+          "errorCode": $scope.taskContent.errorCode,
+          "payload": $scope.taskContent.payload
         }
       }, function(res) {
         if(res.code == 'ECONNREFUSED'){
@@ -425,11 +431,10 @@ angular.module('starter.controllers', [])
         }else{
           $scope.hide();
           showSuccessMessage();
-          location.href = '#/tab/tasks';
         }
       }, function(msg,err) {
         $scope.noticeMessage = "$fh.cloud failed. Error: " + JSON.stringify(err);
-        $scope.tasks = null;
+        $scope.taskContent = null;
         // Clear loading
         $scope.hide();
       });
@@ -441,4 +446,50 @@ angular.module('starter.controllers', [])
       }
       return false;
   };
+
+  $scope.statusIsReserved = function(){
+        if ($stateParams.status == 'Reserved') {
+          return true;
+        }
+        return false;
+  };
+
+  // Load the modal from the given template URL
+  $ionicModal.fromTemplateUrl('templates/task-detail-edit.html', function($ionicModal) {
+    $scope.modal = $ionicModal;
+  }, {
+    // Use our scope for the scope of the modal to keep it simple
+    scope: $scope,
+    // The animation we want to use for the modal entrance
+    animation: 'slide-in-up'
+  });
+
+  // Cleanup the modal when we're done with it!
+  $scope.$on('$destroy', function() {
+    $scope.modal.remove();
+  });
+  // Execute action on hide modal
+  $scope.$on('modal.hidden', function() {
+  });
+  // Execute action on remove modal
+  $scope.$on('modal.removed', function() {
+    // Execute action
+  });
+
+   $scope.modalCancel = function(){
+    $scope.modal.hide();
+    $scope.show();
+    loadTaskContent();
+  }
+
+  $scope.modalComplete = function(){
+    completeTask();
+    $scope.modal.hide();
+    location.href = '#/tab/tasks';
+  }
+
+  $scope.modalSave = function(){
+    $scope.modal.hide();
+  }
+
 })

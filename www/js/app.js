@@ -77,6 +77,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         controller: 'TaskDetailCtrl'
       }
     }
+  })
+  .state('tab.task-detail-edit', {
+    url: '/tasks/:taskId?status=:taskStatus?mode=:edit',
+    views: {
+        templateUrl: 'templates/task-detail-edit.html',
+        controller: 'TaskDetailCtrl'
+    }
   });
 
   // if none of the above states are matched, use this as the fallback

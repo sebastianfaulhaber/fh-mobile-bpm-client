@@ -147,3 +147,11 @@
 .ownerlessTask{
   color: #cc0000 !IMPORTANT;
 }
+
+.modalHeader{
+  background-color: #cc0000 !IMPORTANT;
+}
+
+.modalHeader h1{
+  color: #FFFFFF !IMPORTANT;
+}

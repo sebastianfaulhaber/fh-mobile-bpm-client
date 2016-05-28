@@ -1,0 +1,47 @@
+<ion-modal-view view-title=>
+  <ion-header-bar class="modalHeader">
+      <h1 class="title">{{taskContent.TaskName}} - EditMode</h1>
+    </ion-header-bar>
+  <ion-content class="padding">
+    <div class="list" ng-show="noticeMessage">
+      <span class="item noticeMessage" >
+        <p class="noticeMessage"><b>{{noticeMessage}}</b></p>
+      </span>
+    </div>
+      <div class="list list-inset" ng-show="taskContent" data-ng-init="getTaskContent()">
+          <label class="item item-input">
+            <span class="input-label"><b>Device Type:</b></span>
+            <input type="text" value="{{taskContent.deviceType}}" ng-model="taskContent.deviceType">
+          </label>
+          <label class="item item-input">
+            <span class="input-label"><b>Device ID:</b></span>
+            <input type="text" value="{{taskContent.deviceID}}" ng-model="taskContent.deviceID">
+          </label>
+          <label class="item item-input">
+            <span class="input-label"><b>Data received:</b></span>
+            <input type="text" value="{{taskContent.payload}}" ng-model="taskContent.payload">
+          </label>
+          <label class="item item-input">
+            <span class="input-label"><b>Time of error event:</b></span>
+            <input type="text" value="{{taskContent.timestamp}}" ng-model="taskContent.timestamp">
+          </label>
+          <label class="item item-input">
+            <span class="input-label"><b>Error Code:</b></span>
+            <input type="text" value="{{taskContent.errorCode}}" ng-model="taskContent.errorCode">
+          </label>
+          <label class="item item-input">
+            <span class="input-label"><b>Error Message:</b></span>
+            <input type="text" value="{{taskContent.errorMessage}}" ng-model="taskContent.errorMessage">
+          </label>
+        <button type="button" class="button button-block button-stable button-complete" ng-click="modalComplete()">
+          Complete Task
+        </button>
+        <!--<button type="button" class="button button-block button-positive" ng-click="modalSave()">
+          Save
+        </button>-->
+        <button type="button" class="button button-block button-stable" ng-click="modalCancel()">
+          Cancel
+        </button>
+    </div>
+  </ion-content>
+</ion-modal-view>
