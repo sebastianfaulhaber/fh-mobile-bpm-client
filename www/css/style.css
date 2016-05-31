@@ -155,3 +155,7 @@
 .modalHeader h1{
   color: #FFFFFF !IMPORTANT;
 }
+
+.myContentColumn{
+  padding: 3%;
+}
