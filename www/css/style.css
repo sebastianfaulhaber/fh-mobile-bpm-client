@@ -159,3 +159,18 @@
 .myContentColumn{
   padding: 3%;
 }
+
+.myBrand{
+  color: #cc0000 !IMPORTANT;
+  padding-top: 5%;
+}
+
+.myLogo{
+  float: left;
+  margin-bottom: 2%;
+}
+
+.informationDash{
+  float: left;
+  width: 100%;
+}

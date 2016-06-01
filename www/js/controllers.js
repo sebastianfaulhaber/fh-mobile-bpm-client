@@ -16,7 +16,7 @@ angular.module('starter.controllers', [])
 
     $scope.getProcess = function(){
       $fh.cloud({
-        "path": "/bpm/getProcess",
+        "path": "/bpm/getProcessInstance",
         "method": "POST",
         "contentType": "application/json",
         "data": {
@@ -40,6 +40,21 @@ angular.module('starter.controllers', [])
       // Stop the ion-refresher from spinning
       $scope.$broadcast('scroll.refreshComplete');
     }
+})
+
+.controller('ProcessCtrl', function($scope, $ionicLoading) {
+
+    // Show loading...
+    $scope.show = function() {
+      $ionicLoading.show({
+        template: 'Loading...'
+      });
+    };
+
+    // Hide loading...
+    $scope.hide = function(){
+      $ionicLoading.hide();
+    };
 
     $scope.case = {
     }
@@ -121,24 +136,6 @@ angular.module('starter.controllers', [])
   }
 
   $scope.setLoginCredentials = function(){
-    $fh.cloud({
-      "path": "/bpm/testRequest",
-      "method": "POST",
-      "contentType": "application/json",
-      "data": {
-        "username": $scope.login.username,
-        "password": $scope.login.password,
-        "ip": $scope.login.ip,
-        "port": $scope.login.port
-      }
-    }, function(res) {
-      if(res.code == 'ECONNREFUSED'){
-        $scope.noticeMessage = 'Connection to mBaaS refused';
-      }else{
-        if(res.includes('HTTP Status 401')){
-          message = 'Bad credentials';
-          $scope.show();
-      }else{
         message = 'Success';
         $scope.show();
         // store the credentials to the mobile device
@@ -146,11 +143,6 @@ angular.module('starter.controllers', [])
         window.localStorage.setItem("bpm_password", $scope.login.password);
         window.localStorage.setItem("bpm_ip", $scope.login.ip);
         window.localStorage.setItem("bpm_port", $scope.login.port);
-        }
-      }
-    }, function(msg,err) {
-      $scope.noticeMessage = "$fh.cloud failed. Error: " + JSON.stringify(err);
-    });
   };
 
   $scope.initCredentials = function() {

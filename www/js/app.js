@@ -60,6 +60,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
   })
 
+  .state('tab.process', {
+    url: '/process',
+    views: {
+      'tab-process': {
+        templateUrl: 'templates/tab-process.html',
+        controller: 'ProcessCtrl'
+      }
+    }
+  })
+
   .state('tab.tasks', {
     url: '/tasks',
     views: {
