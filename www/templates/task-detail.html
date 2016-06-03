@@ -10,29 +10,27 @@
       </span>
     </div>
       <div class="list list-inset" ng-show="taskContent" data-ng-init="getTaskContent()">
+        <h4>Customer request</h4>
         <div class="row">
-          <div class="col item myContentColumn"><b>Device Type:</b></div>
-          <div class="col item myContentColumn">{{taskContent.deviceType}}</div>
+          <div class="col item myContentColumn"><b>First Name:</b></div>
+          <div class="col item myContentColumn">{{taskContent.firstname}}</div>
         </div>
         <div class="row">
-          <div class="col item myContentColumn"><b>Device ID:</b></div>
-          <div class="col item myContentColumn">{{taskContent.deviceID}}</div>
+          <div class="col item myContentColumn"><b>Last Name:</b></div>
+          <div class="col item myContentColumn">{{taskContent.lastname}}</div>
         </div>
         <div class="row">
-          <div class="col item myContentColumn"><b>Data received:</b></div>
-          <div class="col item myContentColumn">{{taskContent.payload}}</div>
+          <div class="col item myContentColumn"><b>Request:</b></div>
+          <div class="col item myContentColumn">{{taskContent.request}}</div>
+        </div>
+        <h4>Process request</h4>
+        <div class="row">
+          <div class="col item myContentColumn"><b>Decision:</b></div>
+          <div class="col item myContentColumn">{{taskContent.decision}}</div>
         </div>
         <div class="row">
-          <div class="col item myContentColumn"><b>Time of error event:</b></div>
-          <div class="col item myContentColumn">{{taskContent.timestamp}}</div>
-        </div>
-        <div class="row">
-          <div class="col item myContentColumn"><b>Error Code:</b></div>
-          <div class="col item myContentColumn">{{taskContent.errorCode}}</div>
-        </div>
-        <div class="row">
-          <div class="col item myContentColumn"><b>Error Message:</b></div>
-          <div class="col item myContentColumn">{{taskContent.errorMessage}}</div>
+          <div class="col item myContentColumn"><b>Comment:</b></div>
+          <div class="col item myContentColumn">{{taskContent.decisioncomment}}</div>
         </div>
         <button type="button" class="button button-block button-stable button-claim" ng-click="modal.show()" ng-show="statusIsInProgress()">
           Edit

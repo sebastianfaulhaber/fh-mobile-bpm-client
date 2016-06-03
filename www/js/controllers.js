@@ -20,14 +20,19 @@ angular.module('starter.controllers', [])
         "method": "POST",
         "contentType": "application/json",
         "data": {
-          "username": window.localStorage.getItem("bpm_username"),
-          "password": window.localStorage.getItem("bpm_password"),
-          "ip": window.localStorage.getItem("bpm_ip"),
-          "port": window.localStorage.getItem("bpm_port")
+          "params": {
+            "username": window.localStorage.getItem("bpm_username"),
+            "password": window.localStorage.getItem("bpm_password"),
+            "ip": window.localStorage.getItem("bpm_ip"),
+            "port": window.localStorage.getItem("bpm_port")
+          }
         }
       }, function(res) {
         if(res.code == 'ECONNREFUSED'){
           $scope.noticeMessage = 'Connection to mBaaS refused';
+          $scope.processName = null;
+        }else if(res.error != null){
+          $scope.noticeMessage = 'Connection to BPM refused'
           $scope.processName = null;
         }else{
           $scope.noticeMessage = null;
@@ -63,23 +68,23 @@ angular.module('starter.controllers', [])
     $scope.createCase = function(){
       $scope.show();
       // check if userInput is defined
-      if ($scope.case.errorMessage && $scope.case.timestamp && $scope.case.deviceType && $scope.case.deviceID &&
-         $scope.case.errorCode && $scope.case.payload) {
+      if ($scope.case.firstname && $scope.case.lastname && $scope.case.request) {
         $fh.cloud({
           "path": "/bpm/startProcess",
           "method": "POST",
           "contentType": "application/json",
           "data": {
-            "username": window.localStorage.getItem("bpm_username"),
-            "password": window.localStorage.getItem("bpm_password"),
-            "ip": window.localStorage.getItem("bpm_ip"),
-            "port": window.localStorage.getItem("bpm_port"),
-            "errorMessage": $scope.case.errorMessage,
-            "timestamp": $scope.case.timestamp,
-            "deviceType": $scope.case.deviceType,
-            "deviceID": $scope.case.deviceID,
-            "errorCode": $scope.case.errorCode,
-            "payload": $scope.case.payload
+            "params": {
+              "username": window.localStorage.getItem("bpm_username"),
+              "password": window.localStorage.getItem("bpm_password"),
+              "ip": window.localStorage.getItem("bpm_ip"),
+              "port": window.localStorage.getItem("bpm_port")
+            },
+            "firstname": $scope.case.firstname,
+            "lastname": $scope.case.lastname,
+            "request": $scope.case.request,
+            "decision": $scope.case.decision,
+            "decisioncomment": $scope.case.decisioncomment
           },
           "timeout": 25000
         }, function(res) {
@@ -88,15 +93,19 @@ angular.module('starter.controllers', [])
             $scope.processName = null;
             // Clear loading
             $scope.hide();
+          }else if(res.error != null){
+            $scope.noticeMessage = 'Connection to BPM refused'
+            $scope.processName = null;
+            // Clear loading
+            $scope.hide();
           }else{
             $scope.noticeMessage = null;
             // Clear form values
-            $scope.case.errorMessage = '';
-            $scope.case.timestamp = '';
-            $scope.case.deviceType = '';
-            $scope.case.deviceID = '';
-            $scope.case.errorCode = '';
-            $scope.case.payload = '';
+            $scope.case.firstname = '';
+            $scope.case.lastname = '';
+            $scope.case.request = '';
+            $scope.case.decision = '';
+            $scope.case.decisioncomment = '';
             // Clear loading
             $scope.hide();
           }
@@ -191,14 +200,20 @@ angular.module('starter.controllers', [])
         "method": "POST",
         "contentType": "application/json",
         "data": {
-          "username": window.localStorage.getItem("bpm_username"),
-          "password": window.localStorage.getItem("bpm_password"),
-          "ip": window.localStorage.getItem("bpm_ip"),
-          "port": window.localStorage.getItem("bpm_port")
+          "params": {
+            "username": window.localStorage.getItem("bpm_username"),
+            "password": window.localStorage.getItem("bpm_password"),
+            "ip": window.localStorage.getItem("bpm_ip"),
+            "port": window.localStorage.getItem("bpm_port")
+          }
         }
       }, function(res) {
         if(res.code == 'ECONNREFUSED'){
           $scope.noticeMessage = 'Connection to mBaaS refused';
+          $scope.tasks = null;
+          $scope.hide();
+        }else if(res.error != null){
+          $scope.noticeMessage = 'Connection to BPM refused'
           $scope.tasks = null;
           $scope.hide();
         }else{
@@ -208,8 +223,8 @@ angular.module('starter.controllers', [])
             $scope.noticeMessage  = 'Tasklist is empty';
           }else{
             for (i = 0; i < res.taskSummaryList.length; i++) {
-              if(isBlank(res.taskSummaryList[i].actualOwnerId))
-              res.taskSummaryList[i].actualOwnerId = 'Ownerless';
+              if(isBlank(res.taskSummaryList[i]['actual-owner']))
+              res.taskSummaryList[i]['actual-owner'] = 'Ownerless';
             }
             $scope.tasks = res.taskSummaryList;
           }
@@ -233,15 +248,21 @@ angular.module('starter.controllers', [])
         "method": "POST",
         "contentType": "application/json",
         "data": {
-          "username": window.localStorage.getItem("bpm_username"),
-          "password": window.localStorage.getItem("bpm_password"),
-          "ip": window.localStorage.getItem("bpm_ip"),
-          "port": window.localStorage.getItem("bpm_port"),
+          "params": {
+            "username": window.localStorage.getItem("bpm_username"),
+            "password": window.localStorage.getItem("bpm_password"),
+            "ip": window.localStorage.getItem("bpm_ip"),
+            "port": window.localStorage.getItem("bpm_port")
+          },
           "taskId": task.id
         }
       }, function(res) {
         if(res.code == 'ECONNREFUSED'){
           $scope.noticeMessage = 'Connection to mBaaS refused';
+          $scope.tasks = null;
+          $scope.hide();
+        }else if(res.error != null){
+          $scope.noticeMessage = 'Connection to BPM refused'
           $scope.tasks = null;
           $scope.hide();
         }else{
@@ -262,15 +283,21 @@ angular.module('starter.controllers', [])
         "method": "POST",
         "contentType": "application/json",
         "data": {
-          "username": window.localStorage.getItem("bpm_username"),
-          "password": window.localStorage.getItem("bpm_password"),
-          "ip": window.localStorage.getItem("bpm_ip"),
-          "port": window.localStorage.getItem("bpm_port"),
+          "params": {
+            "username": window.localStorage.getItem("bpm_username"),
+            "password": window.localStorage.getItem("bpm_password"),
+            "ip": window.localStorage.getItem("bpm_ip"),
+            "port": window.localStorage.getItem("bpm_port")
+          },
           "taskId": task.id
         }
       }, function(res) {
         if(res.code == 'ECONNREFUSED'){
           $scope.noticeMessage = 'Connection to mBaaS refused';
+          $scope.tasks = null;
+          $scope.hide();
+        }else if(res.error != null){
+          $scope.noticeMessage = 'Connection to BPM refused'
           $scope.tasks = null;
           $scope.hide();
         }else{
@@ -291,15 +318,21 @@ angular.module('starter.controllers', [])
         "method": "POST",
         "contentType": "application/json",
         "data": {
-          "username": window.localStorage.getItem("bpm_username"),
-          "password": window.localStorage.getItem("bpm_password"),
-          "ip": window.localStorage.getItem("bpm_ip"),
-          "port": window.localStorage.getItem("bpm_port"),
+          "params": {
+            "username": window.localStorage.getItem("bpm_username"),
+            "password": window.localStorage.getItem("bpm_password"),
+            "ip": window.localStorage.getItem("bpm_ip"),
+            "port": window.localStorage.getItem("bpm_port")
+          },
           "taskId": task.id
         }
       }, function(res) {
         if(res.code == 'ECONNREFUSED'){
           $scope.noticeMessage = 'Connection to mBaaS refused';
+          $scope.tasks = null;
+          $scope.hide();
+        }else if(res.error != null){
+          $scope.noticeMessage = 'Connection to BPM refused'
           $scope.tasks = null;
           $scope.hide();
         }else{
@@ -369,17 +402,21 @@ angular.module('starter.controllers', [])
       "method": "POST",
       "contentType": "application/json",
       "data": {
-        "username": window.localStorage.getItem("bpm_username"),
-        "password": window.localStorage.getItem("bpm_password"),
-        "ip": window.localStorage.getItem("bpm_ip"),
-        "port": window.localStorage.getItem("bpm_port"),
-        "taskStatus": $stateParams.status,
+        "params": {
+          "username": window.localStorage.getItem("bpm_username"),
+          "password": window.localStorage.getItem("bpm_password"),
+          "ip": window.localStorage.getItem("bpm_ip"),
+          "port": window.localStorage.getItem("bpm_port")
+        },
         "taskId": $stateParams.taskId
-      },
-      "timeout": 25000
+      }
     }, function(res) {
       if(res.code == 'ECONNREFUSED'){
         $scope.noticeMessage = 'Connection to mBaaS refused';
+        $scope.taskContent = null;
+        $scope.hide();
+      }else if(res.error != null){
+        $scope.noticeMessage = 'Connection to BPM refused'
         $scope.taskContent = null;
         $scope.hide();
       }else{
@@ -403,21 +440,26 @@ angular.module('starter.controllers', [])
         "method": "POST",
         "contentType": "application/json",
         "data": {
-          "username": window.localStorage.getItem("bpm_username"),
-          "password": window.localStorage.getItem("bpm_password"),
-          "ip": window.localStorage.getItem("bpm_ip"),
-          "port": window.localStorage.getItem("bpm_port"),
+          "params": {
+            "username": window.localStorage.getItem("bpm_username"),
+            "password": window.localStorage.getItem("bpm_password"),
+            "ip": window.localStorage.getItem("bpm_ip"),
+            "port": window.localStorage.getItem("bpm_port")
+          },
           "taskId": $stateParams.taskId,
-          "errorMessage": $scope.taskContent.errorMessage,
-          "timestamp": $scope.taskContent.timestamp,
-          "deviceType": $scope.taskContent.deviceType,
-          "deviceID": $scope.taskContent.deviceID,
-          "errorCode": $scope.taskContent.errorCode,
-          "payload": $scope.taskContent.payload
+          "firstname": $scope.taskContent.firstname,
+          "lastname": $scope.taskContent.lastname,
+          "request": $scope.taskContent.request,
+          "decision": $scope.taskContent.decision,
+          "decisioncomment": $scope.taskContent.decisioncomment
         }
       }, function(res) {
         if(res.code == 'ECONNREFUSED'){
           $scope.noticeMessage = 'Connection to mBaaS refused';
+          $scope.taskContent = null;
+          $scope.hide();
+        }else if(res.error != null){
+          $scope.noticeMessage = 'Connection to BPM refused'
           $scope.taskContent = null;
           $scope.hide();
         }else{
